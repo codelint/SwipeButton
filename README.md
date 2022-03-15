@@ -1,6 +1,6 @@
 # SwipeButton
 
-How to
+### How to
 
 ```swift
 import SwiftUI
