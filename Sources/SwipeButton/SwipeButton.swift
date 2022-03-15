@@ -9,6 +9,24 @@
 import SwiftUI
 
 @available(iOS 14.0, OSX 10.15, *)
+public struct ButtonOption {
+    var text: String
+    var backgroundColor: Color = .red
+    var foregroundColor: Color = .white
+    var isTip: Bool = true
+    var action: ((@escaping () -> Void) -> Void)? = nil
+}
+
+@available(iOS 14.0, OSX 10.15, *)
+public enum ButtonDefine{
+    case custom(String, Color, Color, (@escaping () -> Void) -> Void)
+    case quick(String, Color, (@escaping () -> Void) -> Void)
+    case simple(String, Color)
+    case common(String, Color, (@escaping () -> Void) -> Void)
+}
+
+
+@available(iOS 14.0, OSX 10.15, *)
 public struct SwipeButton<Content:View>: View {
     
     @GestureState private var translation: CGSize = .zero
@@ -24,14 +42,15 @@ public struct SwipeButton<Content:View>: View {
     var options: [ButtonOption] = []
     
     @ViewBuilder
-    var content: () -> Content
+    public var content: () -> Content
     
     init(@ViewBuilder content: @escaping () -> Content) {
         self.content = content
     }
     
-    init(defines: [ButtonDefine], @ViewBuilder content: @escaping () -> Content) {
+    public init(maxWidth: CGFloat, defines: [ButtonDefine], @ViewBuilder content: @escaping () -> Content) {
         self.content = content
+        self.maxWidth = maxWidth
         for define in defines {
             switch define {
             case .common(let text, let bgColor, let action):
@@ -91,21 +110,6 @@ public struct SwipeButton<Content:View>: View {
         withAnimation {
             self.scrollX = 0 - buttonWidth
         }
-    }
-    
-    struct ButtonOption {
-        var text: String
-        var backgroundColor: Color = .red
-        var foregroundColor: Color = .white
-        var isTip: Bool = true
-        var action: ((@escaping () -> Void) -> Void)? = nil
-    }
-    
-    enum ButtonDefine{
-        case custom(String, Color, Color, (@escaping () -> Void) -> Void)
-        case quick(String, Color, (@escaping () -> Void) -> Void)
-        case simple(String, Color)
-        case common(String, Color, (@escaping () -> Void) -> Void)
     }
     
     func buttonWidth(offset: Int) -> CGFloat {
@@ -279,41 +283,4 @@ struct ObservableSwipeButtonWidthPreferenceKey: PreferenceKey {
         }
     }
 }
-
-#if DEBUG
-//struct SwipeButton_Previews: PreviewProvider {
-//
-//    static var previews: some View {
-//        NavigationView{
-//        VStack{
-//            SwipeButton(maxWidth: UIScreen.main.bounds.width, defines: [
-//                .common("Delete", .red, { next in
-//                    next()
-//                }),
-//                .common("OK", .yellow, { next in
-//                    next()
-//                })
-//            ], content: {
-//                NavigationLink(
-//                    destination: TicketDetailView(tid: 268.description),
-//                    label: {
-//                        TestView().background(GeometryReader{ proxy in
-//                            Color.clear.preference(key: ObservableSwipeButtonHeightPreferenceKey.self, value: [proxy.size.height])
-//                        })
-//                    })
-//            }).border(Color.black)
-//
-//            NavigationLink(
-//                destination: TicketDetailView(tid: 268.description),
-//                label: {
-//                    TestView().background(GeometryReader{ proxy in
-//                        Color.clear.preference(key: ObservableSwipeButtonHeightPreferenceKey.self, value: [proxy.size.height])
-//                    })
-//                })
-//        }.background(Color.lightgray)
-//
-//        }
-//    }
-//}
-#endif
 
