@@ -32,7 +32,11 @@ struct SwipeButtonTestView: View {
                         next()
                     })
                 ], content: {
-                    Text("Hello world!!!").padding()
+                    HStack{
+                        Spacer()
+                        Text("Please swipe me ^_^").padding()
+                        Spacer()
+                    }.background(.white)
                 }).border(Color.gray)
                 Spacer()
             }.background(.white)
