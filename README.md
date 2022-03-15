@@ -45,4 +45,6 @@ struct SwipeButtonTestView: View {
     }
 }
 ```
+### Preview
+![Image](https://github.com/codelint/SwipeButton/blob/4add02d90cd59339681669edf6f2dc1084e2c8de/Images/demo.gif)
 
