@@ -25,7 +25,6 @@ public enum ButtonDefine{
     case common(String, Color, (@escaping () -> Void) -> Void)
 }
 
-
 @available(iOS 14.0, OSX 10.15, *)
 public struct SwipeButton<Content:View>: View {
     
@@ -67,6 +66,19 @@ public struct SwipeButton<Content:View>: View {
                 options.append(ButtonOption(text: text, backgroundColor: bgColor))
             }
         }
+    }
+    
+    public init(defines: [ButtonDefine], @ViewBuilder content: @escaping () -> Content) {
+#if os(watchOS)
+        let deviceWidth:CGFloat = WKInterfaceDevice.current().screenBounds.size.width
+#elseif os(iOS)
+        let deviceWidth:CGFloat = UIScreen.main.bounds.size.width
+#elseif os(macOS)
+        let deviceWidth:CGFloat? = NSScreen.main?.visibleFrame.size.width
+#else
+        let deviceWidth:CGFloat = UIScreen.main.bounds.size.width
+#endif
+        self.init(maxWidth: deviceWidth ?? 0.0, defines: defines, content: content)
     }
     
     var drag: some Gesture {
